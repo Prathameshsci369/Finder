@@ -7,7 +7,7 @@ import google.generativeai as genai
 from api_validations import validate_key  # Ensure this module is correctly implemented
 
 # Embedded Gemini API key and Generative AI configuration
-GEMINI_API_KEY = "AIzaSyDX9MmjmVH5jaqJFYndA5sKKnK2dzW73SQ"
+GEMINI_API_KEY = "ENTER_YOUR_OWN_GEMINI_API_KEY"
 genai.configure(api_key=GEMINI_API_KEY)
 model = genai.GenerativeModel("gemini-1.5-flash")
 

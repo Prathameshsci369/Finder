@@ -43,7 +43,7 @@ def display_tool_name():
        ╚═╝     ╚═╝╚═╝  ╚═══╝╚═════╝    
     """
     print("\033[92m" + tool_name_art + "\033[0m")  # Print in green
-    print("\033[93mPentester's Favorite XSS and Sensitive Data Scanner\033[0m")  # Yellow subtitle
+    print("\033[93mPentester's Favorite  Sensitive Data Scanner\033[0m")  # Yellow subtitle
     print("\033[94m---------------------------------------------------\033[0m")  # Blue divider
     print("Starting the scan...\n")
 

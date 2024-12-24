@@ -38,7 +38,7 @@
    - Install Python 3.7+.
    - Install required Python libraries:
      ```bash
-    pip install playwright requests google-generativeai cryptography google.generativeai boto3 stripe
+     pip install playwright requests google-generativeai cryptography google.generativeai boto3 stripe
      ```
    - Set up Playwright dependencies:
      ```bash

@@ -36,7 +36,7 @@
    - Python 3.7+ इन्स्टॉल करा.
    - आवश्यक Python लायब्ररी इन्स्टॉल करा:
      ```bash
-     pip install playwright requests google-generativeai cryptography
+     pip install playwright requests google-generativeai cryptography google.generativeai boto3 stripe
      ```
    - Playwright साठी dependencies सेट करा:
      ```bash

@@ -97,7 +97,7 @@ Source Files:
 You can use your gemini api keys for the structured output , otherwise raw output will be save on your current directory.
 
 ---
-###This tool is open-source. Open for the contribution.
+This tool is open-source. Open for the contribution.
 ### **License**
 This tool is open-source and available under the MIT License.
 

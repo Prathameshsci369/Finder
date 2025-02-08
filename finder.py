@@ -5,7 +5,8 @@ from urllib.parse import urljoin
 from playwright.sync_api import sync_playwright
 import google.generativeai as genai
 from api_validations import validate_key  # Ensure this module is correctly implemented
-
+import asyncio
+from urllib.parse import urljoin, urlparse
 # Embedded Gemini API key and Generative AI configuration
 GEMINI_API_KEY = "ENTER_YOUR_OWN_GEMINI_API_KEY"
 genai.configure(api_key=GEMINI_API_KEY)
@@ -105,24 +106,49 @@ _regex = {
 
 
 # Function to extract JavaScript files using Playwright
-def get_js_files(url):
+async def get_all_js_files(start_url, max_pages=500):
     try:
-        with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
-            page = browser.new_page()
-            page.goto(url)
-            page.wait_for_load_state("load")
+        async with async_playwright() as p:
+            browser = await p.chromium.launch(headless=True)
+            page = await browser.new_page()
+            await page.goto(start_url)
+            await page.wait_for_load_state("load")
 
-            js_files = []
-            scripts = page.query_selector_all("script[src]")
-            for script in scripts:
-                script_url = script.get_attribute("src")
-                if script_url:
-                    full_url = urljoin(url, script_url)
-                    js_files.append(full_url)
+            visited_urls = set()  # Store visited pages
+            js_files = set()  # Store unique JS files
+            to_visit = set([start_url])  # Start with home page
 
-            browser.close()
-        return js_files
+            while to_visit and len(visited_urls) < max_pages:
+                url = to_visit.pop()
+                if url in visited_urls:
+                    continue  # Skip already visited pages
+
+                print(f"Visiting: {url}")
+                await page.goto(url, timeout=25000)
+                await page.wait_for_load_state("load")
+
+                # Extract JavaScript files from current page
+                scripts = await page.query_selector_all("script[src]")
+                for script in scripts:
+                    script_url = await script.get_attribute("src")
+                    if script_url:
+                        full_url = urljoin(url, script_url)
+                        js_files.add(full_url)
+
+                # Extract all links on the page
+                links = await page.query_selector_all("a[href]")
+                for link in links:
+                    href = await link.get_attribute("href")
+                    if href:
+                        full_link = urljoin(url, href)
+                        if urlparse(full_link).netloc == urlparse(start_url).netloc:
+                            to_visit.add(full_link)  # Add only internal links
+
+                visited_urls.add(url)
+
+            await browser.close()
+        return list(js_files)
+
     except Exception as e:
         print(f"\n Error extracting JavaScript files: {e}\n")
         return []
